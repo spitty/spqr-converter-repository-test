@@ -1,5 +1,6 @@
 package ru.yandex.direct;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -46,11 +47,17 @@ public class SpqrConverterRegistryBenchmark {
         new Runner(opt).run();
     }
 
+    public enum Mode {
+        BASELINE,
+        CACHE,
+        NO_CONVERTERS
+    }
+
     @State(Scope.Thread)
     public static class BenchmarkParam {
 
-        @Param({"true", "false"})
-        boolean cacheEnabled;
+        @Param({"baseline", "cache", "no_converters"})
+        String mode;
 
         @Param({"100", "1000", "10000"})
         long objCount;
@@ -68,9 +75,18 @@ public class SpqrConverterRegistryBenchmark {
                     .withResolverBuilders(new AnnotatedResolverBuilder())
                     .withOperationsFromSingleton(personQuery)
                     .withValueMapperFactory(new JacksonValueMapperFactory());
-            if (cacheEnabled) {
-                graphQLSchemaGenerator
-                        .withConverterRegistryFactory(CachingConverterRegistry::new);
+            Mode mode = Mode.valueOf(this.mode.toUpperCase());
+            switch (mode) {
+                case CACHE:
+                    graphQLSchemaGenerator
+                            .withConverterRegistryFactory(CachingConverterRegistry::new);
+                    break;
+                case NO_CONVERTERS:
+                    graphQLSchemaGenerator.withOutputConverters((conf, current) -> Collections.emptyList());
+                    break;
+                case BASELINE:
+                    //no additional settings
+                    break;
             }
             GraphQLSchema schema = graphQLSchemaGenerator
                     .generate();
