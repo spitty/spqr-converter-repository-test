@@ -6,15 +6,18 @@ That patch allows users set custom `ConverterRegistry`.
 For example using `CachingConverterRegistry` from this repository
 can significantly decrease execution time for simple GraphQL query.
 
-Benchmark results on my personal laptop:
+Benchmark results:
 ```
-Benchmark                                  (cacheEnabled)  (objCount)  Mode  Cnt    Score    Error  Units
-SpqrConverterRegistryBenchmark.testMethod            true         100  avgt    5    0.495 ±  0.042  ms/op
-SpqrConverterRegistryBenchmark.testMethod            true        1000  avgt    5    4.413 ±  0.376  ms/op
-SpqrConverterRegistryBenchmark.testMethod            true       10000  avgt    5   44.583 ±  6.199  ms/op
-SpqrConverterRegistryBenchmark.testMethod           false         100  avgt    5    4.241 ±  0.333  ms/op
-SpqrConverterRegistryBenchmark.testMethod           false        1000  avgt    5   44.428 ±  4.937  ms/op
-SpqrConverterRegistryBenchmark.testMethod           false       10000  avgt    5  400.516 ± 13.463  ms/op
+Benchmark                                         (mode)  (objCount)  Mode  Cnt    Score   Error  Units
+SpqrConverterRegistryBenchmark.testMethod       baseline         100  avgt    5    2.947 ± 0.195  ms/op
+SpqrConverterRegistryBenchmark.testMethod       baseline        1000  avgt    5   27.017 ± 2.518  ms/op
+SpqrConverterRegistryBenchmark.testMethod       baseline       10000  avgt    5  275.344 ± 5.253  ms/op
+SpqrConverterRegistryBenchmark.testMethod          cache         100  avgt    5    0.374 ± 0.031  ms/op
+SpqrConverterRegistryBenchmark.testMethod          cache        1000  avgt    5    3.265 ± 0.535  ms/op
+SpqrConverterRegistryBenchmark.testMethod          cache       10000  avgt    5   36.878 ± 8.855  ms/op
+SpqrConverterRegistryBenchmark.testMethod  no_converters         100  avgt    5    0.297 ± 0.032  ms/op
+SpqrConverterRegistryBenchmark.testMethod  no_converters        1000  avgt    5    2.993 ± 0.369  ms/op
+SpqrConverterRegistryBenchmark.testMethod  no_converters       10000  avgt    5   27.468 ± 1.800  ms/op
 ```
 
 ### Run benchmark
